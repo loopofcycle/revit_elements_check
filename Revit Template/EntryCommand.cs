@@ -7,7 +7,7 @@ using Autodesk.Revit.UI;
 #endregion
 
 
-namespace RevitTemplate
+namespace Revit_EIR_check
 {
     /// <summary>
     /// This is the ExternalCommand which gets executed from the ExternalApplication. In a WPF context,

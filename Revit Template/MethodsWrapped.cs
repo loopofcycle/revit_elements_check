@@ -1,7 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
-namespace RevitTemplate
+namespace Revit_EIR_check
 {
     /// <summary>
     /// This is an example of of wrapping a method with an ExternalEventHandler using a string argument.
@@ -41,30 +41,7 @@ namespace RevitTemplate
             UIDocument uiDoc = uiApp.ActiveUIDocument;
             Document doc = uiDoc.Document;
 
-            bool cbDocumentDataIsChecked = false;
-            ui.Dispatcher.Invoke(() => cbDocumentDataIsChecked = ui.CbDocumentData.IsChecked.GetValueOrDefault());
-
-            bool cbSheetDataIsChecked = false;
-            ui.Dispatcher.Invoke(() => cbSheetDataIsChecked = ui.CbSheetData.IsChecked.GetValueOrDefault());
-
-            bool cbWallDataIsChecked = false;
-            ui.Dispatcher.Invoke(() => cbWallDataIsChecked = ui.CbWallData.IsChecked.GetValueOrDefault());
-
-            // METHODS
-            if (cbDocumentDataIsChecked)
-            {
-                Methods.DocumentInfo(ui, doc);
-            }
-
-            if (cbSheetDataIsChecked)
-            {
-                Methods.SheetRename(ui, doc);
-            }
-
-            if (cbWallDataIsChecked)
-            {
-                Methods.WallInfo(ui, doc);
-            }
+            Methods.SelectElement(ui, doc);
         }
     }
 }

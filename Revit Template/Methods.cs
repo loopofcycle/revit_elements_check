@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 
-namespace RevitTemplate
+namespace Revit_EIR_check
 {
     /// <summary>
     /// Create methods here that need to be wrapped in a valid Revit Api context.
@@ -90,9 +96,23 @@ namespace RevitTemplate
         /// <param name="ui">An instance of our UI class, which in this template is the main WPF
         /// window of the application.</param>
         /// <param name="doc">The Revit Document to print the Title of.</param>
-        public static void DocumentInfo(Ui ui, Document doc)
+        public static List<Element> Check_Info(Ui ui, Document doc)
         {
             ui.Dispatcher.Invoke(() => ui.TbDebug.Text += "\n" + (DateTime.Now).ToLongTimeString() + "\t" + doc.Title);
+            Util.LogThreadInfo("Wall Count Method");
+
+            // get all walls in the document
+            List<Element> elements = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_Walls).WhereElementIsNotElementType().ToList();
+
+            // format the message to show the number of walls in the project
+            string message = $"There are {elements.Count} Walls in the project";
+
+            // invoke the UI dispatcher to print the results to the UI
+            ui.Dispatcher.Invoke(() =>
+            ui.TbDebug.Text += "\n" + (DateTime.Now).ToLongTimeString() + "\t" + message);
+
+            return elements;
         }
 
         /// <summary>
@@ -102,24 +122,32 @@ namespace RevitTemplate
         /// <param name="ui">An instance of our UI class, which in this template is the main WPF
         /// window of the application.</param>
         /// <param name="doc">The Revit Document to count the walls of.</param>
-        public static void WallInfo(Ui ui, Document doc)
+        public static void SelectElement(Ui ui, Document doc)
         {
-            Task.Run(() =>
+            Ui.DataObject dataObj = (Ui.DataObject)ui.dataGrid1.SelectedItem;
+            string message = $"Choosen element is {dataObj.ID}";
+
+            ElementId eid = new ElementId(dataObj.ID);
+            ICollection<ElementId> ids = new List<ElementId>();
+            ids.Add(eid);
+            UIDocument uiDoc = new UIDocument(doc);
+
+            using (Transaction t = new Transaction(doc, "Rename Sheets"))
             {
-                Util.LogThreadInfo("Wall Count Method");
+                Util.LogThreadInfo("Selecting element");
 
-                // get all walls in the document
-                ICollection<Wall> walls = new FilteredElementCollector(doc)
-                    .OfCategory(BuiltInCategory.OST_Walls).WhereElementIsNotElementType()
-                    .Select(p => (Wall) p).ToList();
+                // start a transaction within the valid Revit API context
+                t.Start("Rename Sheets");
 
-                // format the message to show the number of walls in the project
-                string message = $"There are {walls.Count} Walls in the project";
+                uiDoc.Selection.SetElementIds(ids);
+                uiDoc.ShowElements(ids);
 
-                // invoke the UI dispatcher to print the results to the UI
-                ui.Dispatcher.Invoke(() =>
-                    ui.TbDebug.Text += "\n" + (DateTime.Now).ToLongTimeString() + "\t" + message);
-            });
+                t.Commit();
+                t.Dispose();
+            }
+
+            ui.Dispatcher.Invoke(() => ui.TbDebug.Text += "\n" + (DateTime.Now).ToLongTimeString() + "\t" + message);
+
         }
     }
 }

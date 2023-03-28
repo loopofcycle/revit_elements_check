@@ -8,7 +8,7 @@ using System.Windows.Threading;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 
-namespace RevitTemplate
+namespace Revit_EIR_check
 {
     /// <summary>
     /// This is the main class which defines the Application, and inherits from Revit's
@@ -34,26 +34,13 @@ namespace RevitTemplate
             RibbonPanel panel = RibbonPanel(a);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
-            // BUTTON FOR THE SINGLE-THREADED WPF OPTION
-            if (panel.AddItem(
-                new PushButtonData("WPF Template", "WPF Template", thisAssemblyPath,
-                    "RevitTemplate.EntryCommand")) is PushButton button)
-            {
-                // defines the tooltip displayed when the button is hovered over in Revit's ribbon
-                button.ToolTip = "Visual interface for debugging applications.";
-                // defines the icon for the button in Revit's ribbon - note the string formatting
-                Uri uriImage = new Uri("pack://application:,,,/RevitTemplate;component/Resources/code-small.png");
-                BitmapImage largeImage = new BitmapImage(uriImage);
-                button.LargeImage = largeImage;
-            }
-
             // BUTTON FOR THE MULTI-THREADED WPF OPTION
             if (panel.AddItem(
-                new PushButtonData("WPF Template\nMulti-Thread", "WPF Template\nMulti-Thread", thisAssemblyPath,
-                    "RevitTemplate.EntryCommandSeparateThread")) is PushButton button2)
+                new PushButtonData("EIR23.1\ncheck up", "EIR23.1\ncheck up", thisAssemblyPath,
+                    "Revit_EIR_check.EntryCommand")) is PushButton button2)
             {
                 button2.ToolTip = "Visual interface for debugging applications.";
-                Uri uriImage = new Uri("pack://application:,,,/RevitTemplate;component/Resources/code-small.png");
+                Uri uriImage = new Uri("pack://application:,,,/Revit_EIR_check;component/Resources/code-small.png");
                 BitmapImage largeImage = new BitmapImage(uriImage);
                 button2.LargeImage = largeImage;
             }
@@ -146,7 +133,7 @@ namespace RevitTemplate
 
         public RibbonPanel RibbonPanel(UIControlledApplication a)
         {
-            string tab = "Template"; // Tab name
+            string tab = "Strana"; // Tab name
             // Empty ribbon panel 
             RibbonPanel ribbonPanel = null;
             // Try to create ribbon tab. 

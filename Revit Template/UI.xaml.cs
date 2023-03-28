@@ -1,25 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+
+
+using System.Collections.ObjectModel;
 using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using System.Windows.Input;
+using System.Data;
 
-namespace RevitTemplate
+namespace Revit_EIR_check
 {
     /// <summary>
     /// Interaction logic for UI.xaml
     /// </summary>
     public partial class Ui : Window
     {
-        private readonly Document _doc;
+        private Document _doc;
 
         //private readonly UIApplication _uiApp;
         //private readonly Autodesk.Revit.ApplicationServices.Application _app;
-        private readonly UIDocument _uiDoc;
+        private UIDocument _uiDoc;
 
-        private readonly EventHandlerWithStringArg _mExternalMethodStringArg;
-        private readonly EventHandlerWithWpfArg _mExternalMethodWpfArg;
+        private EventHandlerWithStringArg _mExternalMethodStringArg;
+        private EventHandlerWithWpfArg _mExternalMethodWpfArg;
 
-        public Ui(UIApplication uiApp, EventHandlerWithStringArg evExternalMethodStringArg,
+        // id of element in revit
+        public class DataObject
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string Type { get; set; }
+        }
+
+        public Ui(UIApplication uiApp,
+            EventHandlerWithStringArg evExternalMethodStringArg,
             EventHandlerWithWpfArg eExternalMethodWpfArg)
         {
             _uiDoc = uiApp.ActiveUIDocument;
@@ -29,8 +46,14 @@ namespace RevitTemplate
             Closed += MainWindow_Closed;
 
             InitializeComponent();
+
             _mExternalMethodStringArg = evExternalMethodStringArg;
             _mExternalMethodWpfArg = eExternalMethodWpfArg;
+
+            var list = new ObservableCollection<DataObject>();
+            list.Add(new DataObject() { ID = 0, Name = "empty", Type = "empty" });
+            this.dataGrid1.ItemsSource = list;
+
         }
 
 
@@ -51,6 +74,11 @@ namespace RevitTemplate
         private void BExternalMethod1_Click(object sender, RoutedEventArgs e)
         {
             // Raise external event with this UI instance (WPF) as an argument
+            _mExternalMethodWpfArg.Raise(this);
+        }
+
+        private void BNonExternal_choose_Click(object sender, RoutedEventArgs e)
+        {
             _mExternalMethodWpfArg.Raise(this);
         }
 
@@ -88,17 +116,25 @@ namespace RevitTemplate
             UserAlert();
         }
 
-        private void BNonExternal1_Click(object sender, RoutedEventArgs e)
+        private void BNonExternal_check_Click(object sender, RoutedEventArgs e)
         {
-            Methods.DocumentInfo(this, _doc);
-            UserAlert();
+            List<Element> elems =  Methods.Check_Info(this, _doc);
+
+            var list = new ObservableCollection<DataObject>();
+            foreach (Element element in elems)
+            {
+                list.Add(new DataObject() { ID = element.Id.IntegerValue, Name = element.Name, Type = "empty" });
+            }
+            this.dataGrid1.ItemsSource = list;
+
+            //UserAlert();
         }
 
-        private void BNonExternal2_Click(object sender, RoutedEventArgs e)
-        {
-            Methods.WallInfo(this, _doc);
-            UserAlert();
-        }
+        //private void BNonExternal_choose_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Methods.SelectElement(this, _doc);
+        //    UserAlert();
+        //}
 
         #endregion
     }
