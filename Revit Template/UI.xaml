@@ -30,16 +30,17 @@
                 </TabItem.Header>
                 <Grid>
                     <DataGrid AutoGenerateColumns="False" 
-                            Height="200" 
+                            Height="800" 
                             HorizontalAlignment="Left" 
                             Name="dataGrid1" 
                             VerticalAlignment="Top" 
-                            Width="400"
+                            Width="1600"
                             SelectedItem="{Binding Path=SelectedElement, Mode=TwoWay}">
                         <DataGrid.Columns >
                             <DataGridTextColumn Binding="{Binding Path=ID}" MinWidth="100" />
                             <DataGridTextColumn Binding="{Binding Path=Name}" MinWidth="100" />
-                            <DataGridTextColumn Binding="{Binding Path=Type}" MinWidth="100" />
+                            <DataGridTextColumn Binding="{Binding Path=Category}" MinWidth="100" />
+                            <DataGridTextColumn Binding="{Binding Path=Result}" MinWidth="100" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

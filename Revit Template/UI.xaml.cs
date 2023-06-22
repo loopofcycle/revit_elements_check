@@ -32,7 +32,8 @@ namespace Revit_EIR_check
         {
             public int ID { get; set; }
             public string Name { get; set; }
-            public string Type { get; set; }
+            public string Category { get; set; }
+            public string Result { get; set; }
         }
 
         public Ui(UIApplication uiApp,
@@ -51,7 +52,7 @@ namespace Revit_EIR_check
             _mExternalMethodWpfArg = eExternalMethodWpfArg;
 
             var list = new ObservableCollection<DataObject>();
-            list.Add(new DataObject() { ID = 0, Name = "empty", Type = "empty" });
+            //list.Add(new DataObject() {});
             this.dataGrid1.ItemsSource = list;
 
         }
@@ -118,14 +119,14 @@ namespace Revit_EIR_check
 
         private void BNonExternal_check_Click(object sender, RoutedEventArgs e)
         {
-            List<Element> elems =  Methods.Check_Info(this, _doc);
+            List<DataObject> results =  Methods.CheckElements(this, _doc);
 
             var list = new ObservableCollection<DataObject>();
-            foreach (Element element in elems)
+            foreach (DataObject id in results)
             {
-                list.Add(new DataObject() { ID = element.Id.IntegerValue, Name = element.Name, Type = "empty" });
+                list.Add( id );
             }
-            this.dataGrid1.ItemsSource = list;
+            this.dataGrid1.ItemsSource = results;
 
             //UserAlert();
         }

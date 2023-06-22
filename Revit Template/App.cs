@@ -47,8 +47,8 @@ namespace Revit_EIR_check
 
 
             // listeners/watchers for external events (if you choose to use them)
-            a.ApplicationClosing += a_ApplicationClosing; //Set Application to Idling
-            a.Idling += a_Idling;
+            //a.ApplicationClosing += a_ApplicationClosing; //Set Application to Idling
+            //a.Idling += a_Idling;
 
             return Result.Succeeded;
         }
