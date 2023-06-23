@@ -8,7 +8,7 @@ using System.Windows.Threading;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 
-namespace Revit_EIR_check
+namespace Revit_MP_check
 {
     /// <summary>
     /// This is the main class which defines the Application, and inherits from Revit's
@@ -36,11 +36,11 @@ namespace Revit_EIR_check
 
             // BUTTON FOR THE MULTI-THREADED WPF OPTION
             if (panel.AddItem(
-                new PushButtonData("EIR23.1\ncheck up", "EIR23.1\ncheck up", thisAssemblyPath,
-                    "Revit_EIR_check.EntryCommand")) is PushButton button2)
+                new PushButtonData("MasterPlan\ncheck up", "MP\ncheck up", thisAssemblyPath,
+                    "Revit_MP_check.EntryCommand")) is PushButton button2)
             {
                 button2.ToolTip = "Visual interface for debugging applications.";
-                Uri uriImage = new Uri("pack://application:,,,/Revit_EIR_check;component/Resources/code-small.png");
+                Uri uriImage = new Uri("pack://application:,,,/Revit_MP_check;component/Resources/icon.png");
                 BitmapImage largeImage = new BitmapImage(uriImage);
                 button2.LargeImage = largeImage;
             }

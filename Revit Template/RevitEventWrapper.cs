@@ -1,6 +1,6 @@
 ﻿using Autodesk.Revit.UI;
 
-namespace Revit_EIR_check
+namespace Revit_MP_check
 {
     /// <summary>
     /// Class for creating Argument (Wrapped) External Events

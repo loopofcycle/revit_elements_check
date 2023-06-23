@@ -12,35 +12,8 @@ using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
-namespace Revit_EIR_check
+namespace Revit_MP_check
 {
-    /// <summary>
-    /// Class with configuration for parameters checking
-    /// </summary>
-    public class CheckConfig
-    {
-        public Dictionary<BuiltInCategory, Dictionary<string, string>> ParameterForEachCategory =
-            new Dictionary<BuiltInCategory, Dictionary<string, string>>();
-        
-        /// <summary>
-        /// XML commentary: config for checking parameters
-        /// </summary>
-        public CheckConfig()
-        {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
-            {
-                { "ADSK_Номер секции","not_empty"},
-                { "ADSK_Номер здания","not_empty"},
-                //{ "ADSK_Наименование", "not_empty" },
-            };
-            this.ParameterForEachCategory.Add(BuiltInCategory.OST_Doors, parameters);
-            this.ParameterForEachCategory.Add(BuiltInCategory.OST_Walls, parameters);
-            this.ParameterForEachCategory.Add(BuiltInCategory.OST_Columns, parameters);
-            this.ParameterForEachCategory.Add(BuiltInCategory.OST_Windows, parameters);
-            this.ParameterForEachCategory.Add(BuiltInCategory.OST_Floors, parameters);
-        }
-    }
-
     /// <summary>
     /// Create methods here that need to be wrapped in a valid Revit Api context.
     /// Things like transactions modifying Revit Elements, etc.
@@ -130,58 +103,54 @@ namespace Revit_EIR_check
             ui.Dispatcher.Invoke(() => ui.TbDebug.Text += "\n" + (DateTime.Now).ToLongTimeString() + "\t" + doc.Title);
             Util.LogThreadInfo("Parameters checking");
 
-            // revision parameters of elements, adding results to dict
-            Dictionary<int, Dictionary<string, string>> results_dict = new Dictionary<int, Dictionary<string, string>>();
-            CheckConfig config = new CheckConfig();
-            foreach(KeyValuePair<BuiltInCategory, Dictionary<string, string>> category in config.ParameterForEachCategory)
-            {
-                // get all elements in the document
-                List<Element> elements = new FilteredElementCollector(doc)
-                    .OfCategory(category.Key).WhereElementIsNotElementType().ToList();
-
-                foreach (Element element in elements)
-                {
-                    foreach (KeyValuePair<string, string> param in category.Value)
-                    {
-                        ParameterRevisionStrategy revision = new ParameterRevisionStrategy(element, param.Key, param.Value);
-                        
-                        if (revision.Result == null) { continue; }
-                        
-                        if (results_dict.ContainsKey(element.Id.IntegerValue))
-                        {
-                            results_dict[element.Id.IntegerValue].Add(param.Key, revision.Result);
-                        }
-                        else
-                        {
-                            results_dict.Add(element.Id.IntegerValue, new Dictionary<string, string> { { param.Key, revision.Result } });
-                        }
-                    }
-                }
-            }
-
             // creating results with summary revision
             List<Ui.DataObject> results = new List<Ui.DataObject>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> result in results_dict)
+            
+            var topo_rev = new TopoRevision(doc);
+            if (topo_rev.Result != null)
             {
-                ElementId id = new ElementId(result.Key);
-                Element element = doc.GetElement(id);
-                string category = element.Category.Name.ToString();
-
-                string summary = null;
-                foreach (KeyValuePair<string, string> revision in result.Value)
-                {
-                    summary += revision.Key + ": " + revision.Value + ";\n";
-                }
-
-                results.Add(new Ui.DataObject()
-                    {
-                        ID = result.Key,
-                        Name = element.Name,
-                        Category = category,
-                        Result = summary,
-                    }
-                );
+                results.Add(topo_rev.Result);
             }
+            
+            var dwg_rev = new DWGRevision(doc);
+            if (dwg_rev.Result != null)
+            {
+                results.Add(dwg_rev.Result);
+            }
+
+            results.Add(new Ui.DataObject()
+            {
+                ID = -1,
+                Name = "Активный файл revit",
+                Category = "Наличие файла dwg общей подложки",
+                Result = "Не найден файл dwg",
+            });
+
+            results.Add(new Ui.DataObject()
+            {
+                ID = -1,
+                Name = "Активный файл revit",
+                Category = "Наличие файла dwg подложки Инж.сетей",
+                Result = "Не найден файл dwg",
+            });
+
+            results.Add(new Ui.DataObject()
+            {
+                ID = -1,
+                Name = "Активный файл revit",
+                Category = "Наличие файла 2d-эскиза",
+                Result = "Не найден файл 2d-эскиза",
+            });
+
+            results.Add(new Ui.DataObject()
+            {
+                ID = -1,
+                Name = "Активный файл revit",
+                Category = "Наличие файла растровой- подложки визуализации",
+                Result = "Отсутствует файл с подложкой",
+            });
+
+
 
             // format the message to show the number of walls in the project
             string message = $"There are {results.Count} errors in the project";

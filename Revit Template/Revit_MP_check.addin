@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <RevitAddIns>
   <AddIn Type="Application">
-    <Name>Revit EIR checking</Name>
-    <Assembly>Revit_EIR_check.dll</Assembly>
-    <AddInId>604b1052-f742-4127-8576-c821d1193102</AddInId>
-    <FullClassName>Revit_EIR_check.App</FullClassName>
+    <Name>Revit MP checking</Name>
+    <Assembly>Revit_MP_check.dll</Assembly>
+    <AddInId>604b1052-f742-4127-8576-c821d1193103</AddInId>
+    <FullClassName>Revit_MP_check.App</FullClassName>
     <VendorId>bim_developer</VendorId>
     <VendorDescription>https://github.com/loopofcycle/</VendorDescription>
   </AddIn>

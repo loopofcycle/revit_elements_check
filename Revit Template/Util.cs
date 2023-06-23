@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace Revit_EIR_check
+namespace Revit_MP_check
 {
     public static class Util
     {

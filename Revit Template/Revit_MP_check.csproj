@@ -28,8 +28,8 @@
     <ProjectGuid>{80671941-95DE-4707-9C40-758E89CBD063}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Revit_EIR_check</RootNamespace>
-    <AssemblyName>Revit_EIR_check</AssemblyName>
+    <RootNamespace>Revit_MP_check</RootNamespace>
+    <AssemblyName>Revit_MP_check</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,7 +45,7 @@
     <StartProgram>C:\Program Files\Autodesk\Revit 2018\Revit.exe</StartProgram>
     <StartArguments>/language ENU</StartArguments>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
-    <DocumentationFile>bin\Debug\Revit_EIR_check.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Revit_MP_check.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,9 +57,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files\Autodesk\Revit 2018\Revit.exe</StartProgram>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Revit_EIR_check.addin</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Engine" />
@@ -101,7 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="ParameterRevisionStrategy.cs" />
+    <Compile Include="CheckConfig.cs" />
+    <Compile Include="DWGRevision.cs" />
+    <Compile Include="TopoRevision.cs" />
     <Compile Include="EntryCommandSeparateThread.cs" />
     <Compile Include="EntryCommand.cs" />
     <Compile Include="Methods.cs" />
@@ -179,13 +179,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Revit_EIR_check.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Revit_MP_check.addin" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI.xaml">
@@ -210,7 +208,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(TargetDir)Revit_EIR_check.dll" "$(AppData)\Autodesk\Revit\Addins\2021"
-Copy "$(TargetDir)Revit_EIR_check.addin" "$(AppData)\Autodesk\Revit\Addins\2021"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(TargetDir)Revit_MP_check.dll" "$(AppData)\Autodesk\Revit\Addins\2021"
+Copy "$(TargetDir)Revit_MP_check.addin" "$(AppData)\Autodesk\Revit\Addins\2021"</PostBuildEvent>
   </PropertyGroup>
 </Project>

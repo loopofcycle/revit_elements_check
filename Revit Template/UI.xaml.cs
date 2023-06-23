@@ -11,7 +11,7 @@ using Autodesk.Revit.UI;
 using System.Windows.Input;
 using System.Data;
 
-namespace Revit_EIR_check
+namespace Revit_MP_check
 {
     /// <summary>
     /// Interaction logic for UI.xaml
