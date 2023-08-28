@@ -28,8 +28,8 @@
     <ProjectGuid>{80671941-95DE-4707-9C40-758E89CBD063}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Revit_MP_check</RootNamespace>
-    <AssemblyName>Revit_MP_check</AssemblyName>
+    <RootNamespace>Revit_product_check</RootNamespace>
+    <AssemblyName>Revit_product_check</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,7 +45,7 @@
     <StartProgram>C:\Program Files\Autodesk\Revit 2018\Revit.exe</StartProgram>
     <StartArguments>/language ENU</StartArguments>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
-    <DocumentationFile>bin\Debug\Revit_MP_check.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Revit_product_check.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -99,11 +99,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="CheckConfig.cs" />
-    <Compile Include="DWGRevision.cs" />
-    <Compile Include="TopoRevision.cs" />
+    <Compile Include="ArchitecturalRevisions\MP_Revision.cs" />
+    <Compile Include="ArchitecturalRevisions\ArchRevision.cs" />
+    <Compile Include="ConstructionRevisions\BasicRevision.cs" />
+    <Compile Include="ConstructionRevisions\ConcreteRevision.cs" />
+    <Compile Include="ConstructionRevisions\WallConcreteRevision.cs" />
+    <Compile Include="ConstructionRevisions\FloorsConcreteRevision.cs" />
+    <Compile Include="ConstructionRevisions\FoundationConcreteRevision.cs" />
+    <Compile Include="DTtoHTML.cs" />
+    <Compile Include="ConstructionRevisions\MetallRevision.cs" />
+    <Compile Include="ConstructionRevisions\FloorMetallRevision.cs" />
+    <Compile Include="ConstructionRevisions\FondationMetallRevision.cs" />
+    <Compile Include="ConstructionRevisions\WallMetallRevision.cs" />
     <Compile Include="EntryCommandSeparateThread.cs" />
     <Compile Include="EntryCommand.cs" />
+    <Compile Include="FloorCreator.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="MethodsWrapped.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,15 +128,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RevitEventWrapper.cs" />
+    <Compile Include="ArchitecturalRevisions\RoomRevision.cs" />
     <Compile Include="UI.xaml.cs">
       <DependentUpon>UI.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="License.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Resources\cloud-small.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -179,11 +187,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Revit_MP_check.addin" />
+    <None Include="Revit_product_check.addin" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI.xaml">
@@ -208,7 +217,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(TargetDir)Revit_MP_check.dll" "$(AppData)\Autodesk\Revit\Addins\2021"
-Copy "$(TargetDir)Revit_MP_check.addin" "$(AppData)\Autodesk\Revit\Addins\2021"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(TargetDir)Revit_product_check.dll" "$(AppData)\Autodesk\Revit\Addins\2021"
+Copy "$(TargetDir)Revit_product_check.addin" "$(AppData)\Autodesk\Revit\Addins\2021"</PostBuildEvent>
   </PropertyGroup>
 </Project>

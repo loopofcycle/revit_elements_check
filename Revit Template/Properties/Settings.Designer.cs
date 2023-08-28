@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Revit_MP_check.Properties {
+namespace Revit_product_check.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

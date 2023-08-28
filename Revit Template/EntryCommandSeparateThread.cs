@@ -7,7 +7,7 @@ using Autodesk.Revit.UI;
 #endregion
 
 
-namespace Revit_MP_check
+namespace Revit_product_check
 {
     /// <summary>
     /// This is the ExternalCommand which gets executed from the ExternalApplication. In a WPF context,

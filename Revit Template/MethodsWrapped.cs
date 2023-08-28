@@ -1,7 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
-namespace Revit_MP_check
+namespace Revit_product_check
 {
     /// <summary>
     /// This is an example of of wrapping a method with an ExternalEventHandler using a string argument.
