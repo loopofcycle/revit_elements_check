@@ -5,26 +5,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revit_product_check.ConstructionRevisions
+namespace Revit_product_check.Revisions
 {
     internal class FloorsConcreteRevision: ConcreteRevision
     {
-        public FloorsConcreteRevision(Autodesk.Revit.DB.Document doc)
+
+        FormatOptions fo_area;
+        FormatOptions fo_volume;
+
+        public FloorsConcreteRevision(Document doc, string project)
         {
+
+            this.fo_area = doc.GetUnits().GetFormatOptions(SpecTypeId.Area);
+            this.fo_volume = doc.GetUnits().GetFormatOptions(SpecTypeId.Volume);
+
+
             SetCalculationData(doc);
             if (elements_count > 0)
-                ResultDataObject = GetResultObject(doc.Title);
+                ResultDataObject = GetResultObject(doc, project);
         }
 
         public void SetCalculationData(Document doc)
         {
+            var fo = doc.GetUnits().GetFormatOptions(SpecTypeId.Volume);
+
             var elements = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Floors)
                 .WhereElementIsNotElementType()
                 .ToList();
 
             level = GetLevel(elements);
-            elements_total_volume = GetElementsVolume(elements);
+            elements_total_volume = GetElementsVolume(elements, fo);
             floors_area = GetFloorsArea(doc);
         }
 
@@ -38,14 +49,20 @@ namespace Revit_product_check.ConstructionRevisions
 
             foreach (Element f in floors)
             {
-                //if (f.LevelId != level.Id) continue;
-
-                //Parameter elev_par = f.LookupParameter("Смещение от уровня");
-                //if (elev_par != null & elev_par.AsDouble() != 0) continue;
-
                 Floor floor = (Floor)f;
                 Parameter area_par = f.LookupParameter("Площадь");
-                area += area_par.AsDouble() / 10.7639104166;
+
+                double area_value = UnitUtils.ConvertToInternalUnits(
+                        area_par.AsDouble(),
+                        this.fo_area.GetUnitTypeId()
+                        );
+                
+                area_value = UnitUtils.ConvertToInternalUnits(
+                        area_par.AsDouble(),
+                        UnitTypeId.SquareMeters
+                        );
+
+                area += area_value;
             }
 
             return area;

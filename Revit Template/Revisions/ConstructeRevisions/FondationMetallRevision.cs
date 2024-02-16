@@ -5,23 +5,33 @@ namespace Revit_product_check.Revisions
 {
     internal class FoundationMetallRevision : MetallRevision
     {
-        public FoundationMetallRevision(Autodesk.Revit.DB.Document doc)
+        public FoundationMetallRevision(Document doc, string project)
         {
+            this.doc = doc;
             SetCalculationData(doc);
             if (elements_count > 1)
-                ResultDataObject = GetResultObject(doc.Title);
+                ResultDataObject = GetResultObject(doc, project);
         }
 
-        public new void SetCalculationData(Autodesk.Revit.DB.Document doc)
+        public new void SetCalculationData(Document doc)
         {
-            var elements = new FilteredElementCollector(doc)
+            var fo = doc.GetUnits().GetFormatOptions(SpecTypeId.Volume);
+
+            var foundation_elem = new FilteredElementCollector(doc)
                .OfCategory(BuiltInCategory.OST_StructuralFoundation)
                .WhereElementIsNotElementType()
                .ToList();
-
-            level = GetLevel(elements);
             
-            elements_total_volume += GetElementsVolume(elements);
+            
+            elements_total_volume += GetElementsVolume(foundation_elem, fo);
+
+            var floor_elem = new FilteredElementCollector(doc)
+               .OfCategory(BuiltInCategory.OST_Floors)
+               .WhereElementIsNotElementType()
+               .ToList();
+            elements_total_volume += GetElementsVolume(floor_elem, fo);
+
+            level = GetLevel(foundation_elem);
 
             rebar_total_mass += GetRebarsMass(
                 new FilteredElementCollector(doc)

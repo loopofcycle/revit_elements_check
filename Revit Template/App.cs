@@ -133,7 +133,7 @@ namespace Revit_product_check
 
         public RibbonPanel RibbonPanel(UIControlledApplication a)
         {
-            string tab = "Strana"; // Tab name
+            string tab = "Strana-BIM"; // Tab name
             // Empty ribbon panel 
             RibbonPanel ribbonPanel = null;
             // Try to create ribbon tab. 

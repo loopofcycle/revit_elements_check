@@ -29,9 +29,33 @@ namespace Revit_product_check
         private EventHandlerWithWpfArg _mExternalMethodWpfArg;
 
         // id of element in revit
+        public class OldDataObject
+        {
+            public int ID { get; set; }
+            public int Check_ID { get; set; }
+            public string Check_Text { get; set; }
+            public string Category { get; set; }
+            public string Standart { get; set; }
+            public string Value { get; set; }
+            public string Name { get; set; }
+            public string Result { get; set; }
+            public string Group { get; set; }
+            public string Level { get; set; }
+            public string Count { get; set; }
+            public string Summ { get; set; }
+            public string Fluctuation { get; set; }
+        }
+
         public class DataObject
         {
             public int ID { get; set; }
+            public int Check_ID { get; set; }
+            public string Check_Text { get; set; }
+            public string Title { get; set; }
+            public string Project { get; set; }
+            public string Section { get; set; }
+            public string Doc_complect { get; set; }
+            public string Levels_quantity { get; set; }
             public string Category { get; set; }
             public string Standart { get; set; }
             public string Value { get; set; }
@@ -66,14 +90,12 @@ namespace Revit_product_check
 
             DataGridView dataGridView1 = new DataGridView();
 
-
             this.dataGrid1.ItemsSource = list;
-
+            //this.dataGridView1.DataSource = list;
+            
             dataGridView1.CellFormatting +=
             new System.Windows.Forms.DataGridViewCellFormattingEventHandler(
             this.dataGridView1_CellFormatting);
-
-
 
         }
 
@@ -82,40 +104,14 @@ namespace Revit_product_check
         System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
         {
             // Set the background to red for negative values in the Balance column.
-            //if (dataGridView1.Columns[e.ColumnIndex].Name.Equals("Balance"))
+            //if (dataGridView1.Columns[e.ColumnIndex].Name.Equals("Отклонение"))
             //{
             //    Int32 intValue;
             //    if (Int32.TryParse((String)e.Value, out intValue) &&
-            //        (intValue < 0))
+            //        (intValue > 0))
             //    {
-            //        e.CellStyle.BackColor = Color.Red;
-            //        e.CellStyle.SelectionBackColor = Color.DarkRed;
-            //    }
-            //}
-
-            //// Replace string values in the Priority column with images.
-            //if (dataGridView1.Columns[e.ColumnIndex].Name.Equals("Priority"))
-            //{
-            //    // Ensure that the value is a string.
-            //    String stringValue = e.Value as string;
-            //    if (stringValue == null) return;
-
-            //    // Set the cell ToolTip to the text value.
-            //    DataGridViewCell cell = dataGridView1[e.ColumnIndex, e.RowIndex];
-            //    cell.ToolTipText = stringValue;
-
-            //    // Replace the string value with the image value.
-            //    switch (stringValue)
-            //    {
-            //        case "high":
-            //            e.Value = highPriImage;
-            //            break;
-            //        case "medium":
-            //            e.Value = mediumPriImage;
-            //            break;
-            //        case "low":
-            //            e.Value = lowPriImage;
-            //            break;
+            //        e.CellStyle.BackColor = System.Drawing.Color.Red;
+            //        e.CellStyle.SelectionBackColor = System.Drawing.Color.DarkRed;
             //    }
             //}
         }
@@ -197,7 +193,18 @@ namespace Revit_product_check
         private void BNonExternal_export_Click(object sender, RoutedEventArgs e)
         {
             List<DataObject> results = Methods.CheckElements(this, _doc);
-            Methods.ExportResultstoHTML(results, _doc);
+            //Methods.ExportResultstoHTML(results, _doc);
+            //Methods.ExportResultstoXLS(results, _doc);
+            Methods.ExportToExcel(results, _doc);
+            //UserAlert();
+        }
+
+        private void BNonExternal_export_DB_Click(object sender, RoutedEventArgs e)
+        {
+            List<DataObject> results = Methods.CheckElements(this, _doc);
+            //Methods.ExportResultstoHTML(results, _doc);
+            //Methods.ExportResultstoXLS(results, _doc);
+            Methods.ExportToDB(results, _doc);
             //UserAlert();
         }
 

@@ -7,14 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.UI;
+using Revit_product_check;
 
-namespace Revit_product_check.ArchitecturalRevisions
+namespace Revit_product_check.Revisions
 {
-    public class MP_Revision: ArchitecturalRevisions.ArchRevision
+    public class MasterPlanCutKoefRevision: ArchRevision
     {
         Autodesk.Revit.DB.Document doc = null;
         
-        public MP_Revision(Autodesk.Revit.DB.Document doc)
+        public MasterPlanCutKoefRevision(Autodesk.Revit.DB.Document doc)
         {
             this.doc = doc;
 

@@ -1,27 +1,34 @@
 ﻿using Autodesk.Revit.DB;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Revit_product_check.Revisions
 {
     internal class FloorMetallRevision: MetallRevision
     {
-        public FloorMetallRevision(Autodesk.Revit.DB.Document doc)
+        public FloorMetallRevision(Document doc, string project)
         {
-            SetCalculationData(doc);
-            if (elements_count > 0)
-                ResultDataObject = GetResultObject(doc.Title);
-        }
+            this.doc = doc;
 
-        public new void SetCalculationData(Autodesk.Revit.DB.Document doc)
-        {
             var elements = new FilteredElementCollector(doc)
                .OfCategory(BuiltInCategory.OST_Floors)
                .WhereElementIsNotElementType()
                .ToList();
 
+            SetCalculationData(doc, elements);
+            if (elements_count > 0)
+                ResultDataObject = GetResultObject(doc, project);
+        }
+
+        public new void SetCalculationData(Document doc, List<Element> elements)
+        {
+
+            concrete_class = GetConcreteClass(elements).First().Key;
             level = GetLevel(elements);
-            
-            elements_total_volume += GetElementsVolume(elements);
+
+            var fo = doc.GetUnits().GetFormatOptions(SpecTypeId.Volume);
+
+            elements_total_volume += GetElementsVolume(elements, fo);
 
             rebar_total_mass += GetRebarsMass(
                 new FilteredElementCollector(doc)

@@ -3,7 +3,7 @@
   <AddIn Type="Application">
     <Name>Revit product checking</Name>
     <Assembly>Revit_product_check.dll</Assembly>
-    <AddInId>604b1052-f742-4127-8576-c821d1193105</AddInId>
+    <AddInId>604b1052-f742-4127-8576-c821d1193188</AddInId>
     <FullClassName>Revit_product_check.App</FullClassName>
     <VendorId>bim_developer</VendorId>
     <VendorDescription>https://github.com/loopofcycle/</VendorDescription>
